@@ -49,7 +49,7 @@ namespace ICSWrapper
                 Events.Clear();
                 int index = 1;
                 ICSEvent icsEvent = null;
-                while (index < data.Length - 2)
+                while (index < data.Length - 1)
                 {
                     var line = data[index];
                     (var key, var value) = ReadLine(line);
@@ -59,7 +59,16 @@ namespace ICSWrapper
                     }
                     if (WrapState == LineWrapType.Timezone)
                     {
-                        // not supported
+                        // Timezone not supported
+                    }
+                    if (WrapState == LineWrapType.Alarm)
+                    {
+                        if (icsEvent != null)
+                        {
+                            Events.Add(icsEvent);
+                            icsEvent = null;
+                        }
+                        // Alarm not supported
                     }
                     if (WrapState == LineWrapType.Event)
                     {

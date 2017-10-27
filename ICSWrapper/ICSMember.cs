@@ -11,7 +11,8 @@ namespace ICSWrapper
             RecordTypes = new Dictionary<string, LineWrapType>()
             {
                 [GetName(typeof(ICSEvent))] = LineWrapType.Event,
-                [GetName(typeof(ICSTimezone))] = LineWrapType.Timezone
+                [GetName(typeof(ICSTimezone))] = LineWrapType.Timezone,
+                [GetName(typeof(ICSAlarm))] = LineWrapType.Alarm,
             };
         }
 
@@ -47,7 +48,8 @@ namespace ICSWrapper
         {
             Definition,
             Event,
-            Timezone
+            Timezone,
+            Alarm
         }
 
         private Dictionary<string, LineWrapType> RecordTypes;
