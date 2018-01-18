@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Linq;
 
 namespace ICSWrapper
 {
@@ -82,7 +83,7 @@ namespace ICSWrapper
         protected string StartLine { get { return $"{StartLinePattern}:{GetName(GetType())}"; } }
         protected string EndLine { get { return $"{EndLinePattern}:{GetName(GetType())}"; } }
 
-        protected Dictionary<string, string> Definition;
+        public Dictionary<string, string> Definition;
 
         public void Read(string key, string value)
         {
@@ -95,6 +96,25 @@ namespace ICSWrapper
             {
                 Trace.TraceInformation($"{key} is missing.");
             }
+        }
+
+        public IEnumerable<string> Export()
+        {
+            var result = new List<string>() { StartLine };
+            result.AddRange(ExportDefinition());
+            result.Add(EndLine);
+
+            return result;
+        }
+
+        protected virtual List<string> ExportDefinition()
+        {
+            return new List<string>();
+        }
+
+        protected string GetDefinitionItem(string key)
+        {
+            return $"{key}:{Definition[key]}";
         }
     }
 }

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
+using System.Linq;
 
 namespace ICSWrapper
 {
@@ -40,6 +41,20 @@ namespace ICSWrapper
             }
 
             return this;
+        }
+
+        public void Set(string path)
+        {
+            File.WriteAllLines(path, Export().ToArray());
+            Trace.TraceInformation($"File {path} saved.");
+        }
+
+        protected override List<string> ExportDefinition()
+        {
+            var result = base.ExportDefinition();
+            result.AddRange(Definition.Keys.ToList().Select(k => GetDefinitionItem(k)));
+            Events.ForEach(e => result.AddRange(e.Export()));
+            return result;
         }
 
         private void Parse(string[] data)

@@ -12,6 +12,9 @@ namespace ICSWrapper
         private const string StartKeyName = "DTSTART;VALUE=DATE";
         private const string EndKeyName = "DTEND;VALUE=DATE";
         private const string SummaryKeyName = "SUMMARY";
+        private const string DTStampKeyName = "DTSTAMP";
+        private const string UIDKeyName = "UID";
+
         public ICSEvent()
         {
             Definition = new Dictionary<string, string>()
@@ -22,6 +25,13 @@ namespace ICSWrapper
                 ["UID"] = String.Empty,
                 [SummaryKeyName] = String.Empty
             };
+        }
+
+        protected override List<string> ExportDefinition()
+        {
+            var result = base.ExportDefinition();
+            result.AddRange(Definition.Keys.ToList().Select(k => GetDefinitionItem(k)));
+            return result;
         }
 
         protected bool IsValid()
@@ -38,10 +48,10 @@ namespace ICSWrapper
             return date;
         }
 
-        public DateTime StartDate { get { return ParseDate(StartKeyName); } }
+        public DateTime StartDate { get { return ParseDate(StartKeyName); } set { Definition[StartKeyName] = value.ToString(); } }
 
-        public DateTime EndDate { get { return ParseDate(EndKeyName); } }
+        public DateTime EndDate { get { return ParseDate(EndKeyName); } set { Definition[EndKeyName] = value.ToString(); } }
 
-        public string Summary { get { return Definition[SummaryKeyName]; } }
+        public string Summary { get { return Definition[SummaryKeyName]; } set { Definition[SummaryKeyName] = value; } }
     }
 }
